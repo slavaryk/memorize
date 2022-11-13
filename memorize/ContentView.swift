@@ -8,25 +8,38 @@
 import SwiftUI
 
 struct ContentView: View {
-    let CARDS_CONTENT_LIST = ["⚽️", "🏀", "🏐", "⚾️", "🎱", "🎾", "🏉", "🏈"]
-    @State var cardsCount = 4
+    let CARDS_CONTENT_LIST = ["⚽️", "🏀", "🏐", "⚾️", "🎱", "🎾", "🏉", "🏈", "🛸", "🚀", "🛰️", "🚁", "🛩️", "🛶", "⛵️", "🚤", "⌚️", "📱", "💻", "⌨️", "📷", "🎥"]
+    @State var cardsCount = 6
     
     var body: some View {
         VStack {
-            HStack {
-                ForEach(CARDS_CONTENT_LIST[0..<cardsCount], id: \.self)
-                {
-                    content in
-                    CardView(CONTENT: content)
+            ScrollView {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 65))]) {
+                    ForEach(CARDS_CONTENT_LIST[0..<cardsCount], id: \.self)
+                    {
+                        content in
+                        CardView(CONTENT: content).aspectRatio(2/3, contentMode: .fit)
+                    }
                 }
+                .padding(.horizontal)
             }
-            .padding(.horizontal)
+            
+            Spacer()
             
             HStack {
-                ButtonView(ACTION: { cardsCount += 1 }) { Text("Add") }
+                ButtonView(ACTION: {
+                    guard cardsCount < CARDS_CONTENT_LIST.count else { return }
+                    cardsCount += 1
+                }) { Image(systemName: "plus.circle") }
                 Spacer()
-                ButtonView(ACTION: { cardsCount -= 1 }) { Text("Delete") }
+                ButtonView(ACTION: {
+                    guard cardsCount > 1 else { return }
+                    cardsCount -= 1
+                }) { Image(systemName: "minus.circle")
+                     }
             }
+            .padding(15)
+            .font(.largeTitle)
         }
     }
 }
@@ -41,7 +54,7 @@ struct CardView: View {
 
             if isFaceUp {
                 CARD_SHAPE.fill().foregroundColor(.white)
-                CARD_SHAPE.stroke(lineWidth: 3).foregroundColor(.blue)
+                CARD_SHAPE.stroke(lineWidth: 3).foregroundColor(.orange)
                 Text(CONTENT).font(.largeTitle)
             } else {
                 CARD_SHAPE.fill().foregroundColor(.blue)
@@ -55,9 +68,9 @@ struct CardView: View {
 
 struct ButtonView: View {
     let ACTION: () -> Void
-    let LABEL: () -> Text
+    let LABEL: () -> Image
     var body: some View {
-        Button(action: ACTION, label: LABEL).padding(.horizontal, 30)
+        Button(action: ACTION, label: LABEL)
     }
 }
 
