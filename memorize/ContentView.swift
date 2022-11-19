@@ -8,35 +8,39 @@
 import SwiftUI
 
 struct ContentView: View {
-    let CARDS_CONTENT_LIST = ["⚽️", "🏀", "🏐", "⚾️", "🎱", "🎾", "🏉", "🏈", "🛸", "🚀", "🛰️", "🚁", "🛩️", "🛶", "⛵️", "🚤", "⌚️", "📱", "💻", "⌨️", "📷", "🎥"]
-    @State var cardsCount = 6
-    
+    let CARDS: [[String]] = [
+        ["⚽️", "🏀", "🏐", "⚾️", "🎱", "🎾", "🏉", "🏈"],
+        ["🛸", "🚀", "🛰️", "🚁", "🛩️", "🛶", "⛵️", "🚤"],
+        ["⌚️", "📱", "💻", "⌨️", "📷", "🎥", "📟", "🎙️"],
+    ]
+    @State var CARDS_CONTENT_LIST: [String] = []
+
     var body: some View {
         VStack {
+            Text("Memorize").font(.largeTitle)
+            
             ScrollView {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 65))]) {
-                    ForEach(CARDS_CONTENT_LIST[0..<cardsCount], id: \.self)
+                    ForEach(CARDS_CONTENT_LIST, id: \.self)
                     {
                         content in
                         CardView(CONTENT: content).aspectRatio(2/3, contentMode: .fit)
                     }
                 }
-                .padding(.horizontal)
+                .padding(.all)
             }
             
             Spacer()
-            
+
             HStack {
-                ButtonView(ACTION: {
-                    guard cardsCount < CARDS_CONTENT_LIST.count else { return }
-                    cardsCount += 1
-                }) { Image(systemName: "plus.circle") }
-                Spacer()
-                ButtonView(ACTION: {
-                    guard cardsCount > 1 else { return }
-                    cardsCount -= 1
-                }) { Image(systemName: "minus.circle")
-                     }
+                ForEach(CARDS, id: \.self.hashValue)
+                {
+                    cardsList in
+                    ButtonView(ACTION: {
+                        CARDS_CONTENT_LIST = cardsList.shuffled()
+                    }) { Text(cardsList[0]) }
+
+                }
             }
             .padding(15)
             .font(.largeTitle)
@@ -68,7 +72,8 @@ struct CardView: View {
 
 struct ButtonView: View {
     let ACTION: () -> Void
-    let LABEL: () -> Image
+    let LABEL: () -> Text
+
     var body: some View {
         Button(action: ACTION, label: LABEL)
     }
