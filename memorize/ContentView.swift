@@ -41,6 +41,7 @@ struct ContentView: View {
                     }) { Text(cardsList[0]) }
 
                 }
+                .frame(width: 100)
             }
             .padding(15)
             .font(.largeTitle)
