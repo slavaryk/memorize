@@ -9,16 +9,17 @@ import Foundation
 
 struct MemoryGame<CardContent> where CardContent: Equatable {
     private(set) var cards: [Card] = []
-    private(set) var theme: String = ""
+    private(set) var themes: [String]
     private var firstChosenCardIndex: Int?
     
-    init(numberOfPairsOfCards: Int, content: (Int) -> CardContent) {
-        cards = Array<Card>()
-        
-        for index in 0..<numberOfPairsOfCards {
-            cards.append(Card(id: index*2, content: content(index)))
-            cards.append(Card(id: index*2+1, content: content(index)))
+    private(set) var chosenTheme: String? {
+        didSet {
+            cards = []
         }
+    }
+    
+    init(themes: [String]) {
+        self.themes = themes
     }
     
     mutating func choose(_ card: Card) {
@@ -53,6 +54,21 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
     mutating func turnAllCardsFaceDown() {
         for index in cards.indices {
             cards[index].isFaceUp = false
+        }
+    }
+    
+    mutating func chooseRandomTheme() {
+        chosenTheme = themes.randomElement()!
+    }
+    
+    mutating func buildCardsFromChosenTheme(
+        numberOfPairsOfCards: Int,
+        content: (_ index: Int) -> CardContent
+    )
+    {
+        for index in 0..<numberOfPairsOfCards {
+            cards.append(Card(id: index*2, content: content(index)))
+            cards.append(Card(id: index*2+1, content: content(index)))
         }
     }
     

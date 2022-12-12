@@ -13,13 +13,12 @@ struct ContentView: View {
     var body: some View {
         VStack {
             Text("Memorize").font(.largeTitle)
-            
             ScrollView {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 70))]) {
                     ForEach(viewModel.cards)
                     {
                         card in
-                        CardView(CARD: card).aspectRatio(2/3, contentMode: .fit)
+                        CardView(card: card).aspectRatio(2/3, contentMode: .fit)
                             .onTapGesture {
                                 viewModel.choose(card)
                             }
@@ -28,42 +27,48 @@ struct ContentView: View {
                 .padding(.horizontal)
                 .foregroundColor(.blue)
             }
+            Spacer()
+            HStack {
+                ButtonView(label: { Text("New game").font(.title2) }) {
+                    viewModel.startNewGame()
+                }
+            }
         }
     }
 }
 
 struct CardView: View {
-    let CARD: MemoryGame<String>.Card
+    let card: MemoryGame<String>.Card
     
     var body: some View {
         ZStack {
-            let CARD_SHAPE = RoundedRectangle(cornerRadius: 20)
+            let cardShape = RoundedRectangle(cornerRadius: 20)
 
-            if CARD.isFaceUp {
-                CARD_SHAPE.fill().foregroundColor(.white)
-                CARD_SHAPE.strokeBorder(lineWidth: 3).foregroundColor(.orange)
-                Text(CARD.content).font(.largeTitle)
-            } else if CARD.isMatched {
-                CARD_SHAPE.opacity(0)
+            if card.isFaceUp {
+                cardShape.fill().foregroundColor(.white)
+                cardShape.strokeBorder(lineWidth: 3).foregroundColor(.orange)
+                Text(card.content).font(.largeTitle)
+            } else if card.isMatched {
+                cardShape.opacity(0)
             } else {
-                CARD_SHAPE.fill()
+                cardShape.fill()
             }
         }
     }
 }
 
 struct ButtonView: View {
-    let ACTION: () -> Void
-    let LABEL: () -> Text
+    let label: () -> Text
+    let action: () -> Void
 
     var body: some View {
-        Button(action: ACTION, label: LABEL)
+        Button(action: action, label: label)
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        let GAME = EmojiMemoryGame()
-        ContentView(viewModel: GAME).preferredColorScheme(.light)
+        let game = EmojiMemoryGame()
+        ContentView(viewModel: game).preferredColorScheme(.light)
     }
 }
