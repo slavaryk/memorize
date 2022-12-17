@@ -12,19 +12,24 @@ class EmojiMemoryGame: ObservableObject {
     
     static let emojis: [String: EmojiTheme] = [
         "sport": EmojiTheme(
-            numberOfPairsOfCards: 8,
+            numberOfPairsOfCards: 4,
             content: ["⚽️", "🏀", "🏐", "⚾️", "🎱", "🎾", "🏉", "🏈"],
             color: Color.blue
         ),
         "vehicles": EmojiTheme(
-            numberOfPairsOfCards: 8,
+            numberOfPairsOfCards: 3,
             content: ["🛸", "🚀", "🛰️", "🚁", "🛩️", "🛶", "⛵️", "🚤"],
-            color: Color.orange
+            color: Color.red
         ),
         "gadgets": EmojiTheme(
-            numberOfPairsOfCards: 4,
+            numberOfPairsOfCards: 3,
             content: ["⌚️", "📱", "💻", "⌨️", "📷", "🎥", "📟", "🎙️"],
             color: Color.indigo
+        ),
+        "halloween": EmojiTheme(
+            numberOfPairsOfCards: 3,
+            content: ["🎃", "💀", "👻", "🫥", "👹", "👽", "🤖", "🧻"],
+            color: Color.orange
         ),
     ]
     
@@ -33,16 +38,26 @@ class EmojiMemoryGame: ObservableObject {
     }
     
     var chosenTheme: String {
-        model.chosenTheme!
+        model.chosenTheme ?? "Tap 'New game'"
+    }
+    
+    var chosenThemeCapitalized: String {
+        self.chosenTheme.capitalized
     }
 
     var cards: [MemoryGame<String>.Card] {
         model.cards
     }
     
+    var score: Int {
+        model.score
+    }
+    
     func startNewGame() {
         chooseRandomTheme()
         buildCardsFromChosenTheme()
+        shuffleCards()
+        resetScore()
     }
     
     func chooseRandomTheme() {
@@ -50,10 +65,18 @@ class EmojiMemoryGame: ObservableObject {
     }
     
     func buildCardsFromChosenTheme() {
-        model.buildCardsFromChosenTheme(numberOfPairsOfCards: chosenTheme.count) {
-            index in
-            EmojiMemoryGame.emojis[chosenTheme]!.content[index]
-        }
+        model.buildCardsFromChosenTheme(
+            numberOfPairsOfCards: EmojiMemoryGame.emojis[chosenTheme]?.numberOfPairsOfCards ?? 0,
+            content: EmojiMemoryGame.emojis[chosenTheme]?.content ?? []
+        )
+    }
+    
+    func shuffleCards() {
+        model.shuffleCards()
+    }
+    
+    func resetScore() {
+        model.resetScore()
     }
     
     func choose(_ card: MemoryGame<String>.Card) {

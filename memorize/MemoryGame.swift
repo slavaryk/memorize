@@ -10,6 +10,7 @@ import Foundation
 struct MemoryGame<CardContent> where CardContent: Equatable {
     private(set) var cards: [Card] = []
     private(set) var themes: [String]
+    private(set) var score: Int = 0
     private var firstChosenCardIndex: Int?
     
     private(set) var chosenTheme: String? {
@@ -37,7 +38,10 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
             turnAllCardsFaceDown()
             firstChosenCardIndex = cardIndex
         }
+        
         cards[cardIndex].isFaceUp.toggle()
+        resolveScore(of: cardIndex)
+        if !cards[cardIndex].isSeen { cards[cardIndex].isSeen = true }
     }
     
     mutating func checkMatching(with cardIndex: Int) {
@@ -57,19 +61,39 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
         }
     }
     
+    mutating func resolveScore(of cardIndex: Int) {
+        if (cards[cardIndex].isMatched) { score += 2; return }
+        if (cards[cardIndex].isSeen) { score -= 1 }
+    }
+    
     mutating func chooseRandomTheme() {
         chosenTheme = themes.randomElement()!
     }
     
-    mutating func buildCardsFromChosenTheme(
-        numberOfPairsOfCards: Int,
-        content: (_ index: Int) -> CardContent
-    )
-    {
-        for index in 0..<numberOfPairsOfCards {
-            cards.append(Card(id: index*2, content: content(index)))
-            cards.append(Card(id: index*2+1, content: content(index)))
+    mutating func buildCardsFromChosenTheme(numberOfPairsOfCards: Int, content: [CardContent]) {
+        var actualNumberOfPairsOfCards = numberOfPairsOfCards
+        var changeableContent = Array(content)
+        
+        if actualNumberOfPairsOfCards > content.count {
+            actualNumberOfPairsOfCards = content.count
         }
+        
+        for index in 0..<actualNumberOfPairsOfCards {
+            if let safeRandomContentElement = changeableContent.randomElement() {
+                cards.append(Card(id: index*2, content: safeRandomContentElement))
+                cards.append(Card(id: index*2+1, content: safeRandomContentElement))
+                
+                changeableContent.remove(at: changeableContent.firstIndex(of: safeRandomContentElement)!)
+            }
+        }
+    }
+    
+    mutating func resetScore() {
+        score = 0
+    }
+    
+    mutating func shuffleCards() {
+        cards.shuffle()
     }
     
     struct Card: Identifiable {
@@ -77,5 +101,6 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
         var content: CardContent
         var isFaceUp: Bool = false
         var isMatched: Bool = false
+        var isSeen: Bool = false
     }
 }
