@@ -8,8 +8,6 @@
 import SwiftUI
 
 class EmojiMemoryGame: ObservableObject {
-    @Published private var model: MemoryGame<String> = EmojiMemoryGame.createMemoryGame()
-    
     static let emojis: [String: EmojiTheme] = [
         "sport": EmojiTheme(
             numberOfPairsOfCards: 4,
@@ -34,11 +32,19 @@ class EmojiMemoryGame: ObservableObject {
     ]
     
     static func createMemoryGame() -> MemoryGame<String> {
-        MemoryGame<String>(themes: emojis.keys.sorted())
+        MemoryGame<String>()
+    }
+    
+    @Published private var memoryGame: MemoryGame<String>
+    private var themes: Themes
+    
+    init() {
+        themes = Themes(themes: EmojiMemoryGame.emojis.keys.sorted())
+        memoryGame = EmojiMemoryGame.createMemoryGame()
     }
     
     var chosenTheme: String {
-        model.chosenTheme ?? "Tap 'New game'"
+        themes.chosenTheme ?? "Tap 'New game'"
     }
     
     var chosenThemeCapitalized: String {
@@ -46,41 +52,46 @@ class EmojiMemoryGame: ObservableObject {
     }
 
     var cards: [MemoryGame<String>.Card] {
-        model.cards
+        memoryGame.cards
     }
     
     var score: Int {
-        model.score
+        memoryGame.score
     }
     
     func startNewGame() {
         chooseRandomTheme()
+        resetCards()
         buildCardsFromChosenTheme()
         shuffleCards()
         resetScore()
     }
     
     func chooseRandomTheme() {
-        model.chooseRandomTheme()
+        themes.chooseRandomTheme()
+    }
+    
+    func resetCards() {
+        memoryGame.resetCards()
     }
     
     func buildCardsFromChosenTheme() {
-        model.buildCardsFromChosenTheme(
+        memoryGame.buildCards(
             numberOfPairsOfCards: EmojiMemoryGame.emojis[chosenTheme]?.numberOfPairsOfCards ?? 0,
             content: EmojiMemoryGame.emojis[chosenTheme]?.content ?? []
         )
     }
     
     func shuffleCards() {
-        model.shuffleCards()
+        memoryGame.shuffleCards()
     }
     
     func resetScore() {
-        model.resetScore()
+        memoryGame.resetScore()
     }
     
     func choose(_ card: MemoryGame<String>.Card) {
-        model.choose(card)
+        memoryGame.choose(card)
     }
     
     struct EmojiTheme {

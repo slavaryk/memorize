@@ -8,20 +8,9 @@
 import Foundation
 
 struct MemoryGame<CardContent> where CardContent: Equatable {
-    private(set) var cards: [Card] = []
-    private(set) var themes: [String]
     private(set) var score: Int = 0
+    private(set) var cards: [Card] = []
     private var firstChosenCardIndex: Int?
-    
-    private(set) var chosenTheme: String? {
-        didSet {
-            cards = []
-        }
-    }
-    
-    init(themes: [String]) {
-        self.themes = themes
-    }
     
     mutating func choose(_ card: Card) {
         let chosenCardIndex = cards.firstIndex { $0.id == card.id }
@@ -66,11 +55,11 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
         if (cards[cardIndex].isSeen) { score -= 1 }
     }
     
-    mutating func chooseRandomTheme() {
-        chosenTheme = themes.randomElement()!
+    mutating func resetCards() {
+        cards = []
     }
     
-    mutating func buildCardsFromChosenTheme(numberOfPairsOfCards: Int, content: [CardContent]) {
+    mutating func buildCards(numberOfPairsOfCards: Int, content: [CardContent]) {
         var actualNumberOfPairsOfCards = numberOfPairsOfCards
         var changeableContent = Array(content)
         
