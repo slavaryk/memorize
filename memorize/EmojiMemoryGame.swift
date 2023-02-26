@@ -8,7 +8,7 @@
 import SwiftUI
 
 class EmojiMemoryGame: ObservableObject {
-    static let emojis: [String: EmojiTheme] = [
+    private static let emojis: [String: EmojiTheme] = [
         "sport": EmojiTheme(
             numberOfPairsOfCards: 4,
             content: ["⚽️", "🏀", "🏐", "⚾️", "🎱", "🎾", "🏉", "🏈"],
@@ -31,7 +31,7 @@ class EmojiMemoryGame: ObservableObject {
         ),
     ]
     
-    static func createMemoryGame() -> MemoryGame<String> {
+    private static func createMemoryGame() -> MemoryGame<String> {
         MemoryGame<String>()
     }
     
@@ -41,6 +41,7 @@ class EmojiMemoryGame: ObservableObject {
     init() {
         themes = Themes(themes: EmojiMemoryGame.emojis.keys.sorted())
         memoryGame = EmojiMemoryGame.createMemoryGame()
+        startNewGame()
     }
     
     var chosenTheme: String {
@@ -49,6 +50,10 @@ class EmojiMemoryGame: ObservableObject {
     
     var chosenThemeCapitalized: String {
         self.chosenTheme.capitalized
+    }
+    
+    var themeColor: Color {
+        EmojiMemoryGame.emojis[chosenTheme]?.color ?? .blue
     }
 
     var cards: [MemoryGame<String>.Card] {

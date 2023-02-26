@@ -5,8 +5,6 @@
 //  Created by Slava Rykov on 19.11.2022.
 //
 
-import Foundation
-
 struct MemoryGame<CardContent> where CardContent: Equatable {
     private(set) var score: Int = 0
     private(set) var cards: [Card] = []
@@ -20,7 +18,7 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
         handleChoosing(of: safeChosenCardIndex)
     }
     
-    mutating func handleChoosing(of cardIndex: Int) {
+    private mutating func handleChoosing(of cardIndex: Int) {
         if let _ = firstChosenCardIndex {
             checkMatching(with: cardIndex)
         } else {
@@ -33,24 +31,24 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
         if !cards[cardIndex].isSeen { cards[cardIndex].isSeen = true }
     }
     
-    mutating func checkMatching(with cardIndex: Int) {
+    private mutating func checkMatching(with cardIndex: Int) {
         let isMatching = cards[firstChosenCardIndex!].content == cards[cardIndex].content
         if isMatching { markMatching(with: cardIndex) }
         firstChosenCardIndex = nil
     }
     
-    mutating func markMatching(with cardIndex: Int) {
+    private mutating func markMatching(with cardIndex: Int) {
         cards[firstChosenCardIndex!].isMatched = true
         cards[cardIndex].isMatched = true
     }
     
-    mutating func turnAllCardsFaceDown() {
+    private mutating func turnAllCardsFaceDown() {
         for index in cards.indices {
             cards[index].isFaceUp = false
         }
     }
     
-    mutating func resolveScore(of cardIndex: Int) {
+    private mutating func resolveScore(of cardIndex: Int) {
         if (cards[cardIndex].isMatched) { score += 2; return }
         if (cards[cardIndex].isSeen) { score -= 1 }
     }
@@ -86,8 +84,8 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
     }
     
     struct Card: Identifiable {
-        var id: Int
-        var content: CardContent
+        let id: Int
+        let content: CardContent
         var isFaceUp: Bool = false
         var isMatched: Bool = false
         var isSeen: Bool = false

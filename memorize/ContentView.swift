@@ -29,9 +29,9 @@ struct ContentView: View {
                             }
                     }
                 }
-                .padding(.horizontal)
-                .foregroundColor(.blue)
             }
+            .padding(.horizontal)
+            .foregroundColor(viewModel.themeColor)
             Spacer()
             HStack {
                 ButtonView(label: { Text("New game").font(.title2) }) {
@@ -51,15 +51,14 @@ struct CardView: View {
 
             if card.isFaceUp {
                 cardShape.fill().foregroundColor(.white)
-                cardShape.strokeBorder(lineWidth: 3).foregroundColor(.orange)
+                cardShape.strokeBorder(lineWidth: 3)
                 Text(card.content).font(.largeTitle)
             } else if card.isMatched {
                 cardShape.opacity(0)
             } else {
                 cardShape.fill()
-                Text(" ").font(.largeTitle)
             }
-        }
+        }.padding(0.5)
     }
 }
 
