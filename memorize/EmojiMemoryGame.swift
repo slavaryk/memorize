@@ -41,14 +41,13 @@ class EmojiMemoryGame: ObservableObject {
     init() {
         themes = Themes(themes: EmojiMemoryGame.emojis.keys.sorted())
         memoryGame = EmojiMemoryGame.createMemoryGame()
-        startNewGame()
     }
     
     var chosenTheme: String {
         themes.chosenTheme ?? "Tap 'New game'"
     }
     
-    var chosenThemeCapitalized: String {
+    var chosenThemeCapitalizes: String {
         self.chosenTheme.capitalized
     }
     
