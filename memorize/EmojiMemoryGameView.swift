@@ -9,7 +9,7 @@ import SwiftUI
 
 struct EmojiMemoryGameView: View {
     @ObservedObject var game: EmojiMemoryGame
-
+    
     var body: some View {
         VStack {
             Text("Memorize").font(.largeTitle)
@@ -18,24 +18,20 @@ struct EmojiMemoryGameView: View {
                 Text("Score \(game.score)").font(.caption)
             }
             .padding(.top)
-            ScrollView {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))]) {
-                    ForEach(game.cards)
-                    {
-                        card in
-                        CardView(card: card).aspectRatio(2/3, contentMode: .fit)
-                            .onTapGesture {
-                                game.choose(card)
-                            }
+            ScalingGrid(items: game.cards, aspectRatio: 2/3) { card in
+                CardView(card: card)
+                    .onTapGesture {
+                        game.choose(card)
                     }
-                }
             }
             .padding(.horizontal)
             .foregroundColor(game.themeColor)
-            Spacer()
-            HStack {
-                ButtonView(label: { Text("New game").font(.title2) }) {
-                    game.startNewGame()
+            VStack {
+                Spacer(minLength: 0)
+                HStack {
+                    ButtonView(label: { Text("New game").font(.title2) }) {
+                        game.startNewGame()
+                    }
                 }
             }
         }
@@ -63,7 +59,8 @@ struct CardView: View {
                  Little padding prevents cards "jumping" when other cards
                  disappearing while playing
                  */
-            }.padding(0.5)
+            }
+            .padding(0.5)
         }
     }
     
@@ -72,16 +69,16 @@ struct CardView: View {
     }
     
     private struct DrawingConstants {
-        static let cornerRadius: CGFloat = 20;
+        static let cornerRadius: CGFloat = 15;
         static let strokeWidth: CGFloat = 3;
-        static let fontScale: CGFloat = 0.8;
+        static let fontScale: CGFloat = 0.75;
     }
 }
 
 struct ButtonView: View {
     let label: () -> Text
     let action: () -> Void
-
+    
     var body: some View {
         Button(action: action, label: label)
     }

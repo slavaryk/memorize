@@ -10,22 +10,22 @@ import SwiftUI
 class EmojiMemoryGame: ObservableObject {
     private static let emojis: [String: EmojiTheme] = [
         "sport": EmojiTheme(
-            numberOfPairsOfCards: 4,
+            numberOfPairsOfCards: 7,
             content: ["⚽️", "🏀", "🏐", "⚾️", "🎱", "🎾", "🏉", "🏈"],
             color: Color.blue
         ),
         "vehicles": EmojiTheme(
-            numberOfPairsOfCards: 3,
+            numberOfPairsOfCards: 6,
             content: ["🛸", "🚀", "🛰️", "🚁", "🛩️", "🛶", "⛵️", "🚤"],
             color: Color.red
         ),
         "gadgets": EmojiTheme(
-            numberOfPairsOfCards: 3,
+            numberOfPairsOfCards: 4,
             content: ["⌚️", "📱", "💻", "⌨️", "📷", "🎥", "📟", "🎙️"],
             color: Color.indigo
         ),
         "halloween": EmojiTheme(
-            numberOfPairsOfCards: 3,
+            numberOfPairsOfCards: 5,
             content: ["🎃", "💀", "👻", "🫥", "👹", "👽", "🤖", "🧻"],
             color: Color.orange
         ),
