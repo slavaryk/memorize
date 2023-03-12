@@ -75,12 +75,12 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
         }
     }
     
-    mutating func resetScore() {
-        score = 0
-    }
-    
     mutating func shuffleCards() {
         cards.shuffle()
+    }
+    
+    mutating func resetScore() {
+        score = 0
     }
     
     struct Card: Identifiable {

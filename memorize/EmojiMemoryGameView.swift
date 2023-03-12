@@ -14,7 +14,6 @@ struct EmojiMemoryGameView: View {
         VStack {
             Text("Memorize").font(.largeTitle)
             HStack(spacing: 170.0) {
-                Text(game.chosenThemeCapitalizes).font(.caption)
                 Text("Score \(game.score)").font(.caption)
             }
             .padding(.top)
@@ -25,7 +24,7 @@ struct EmojiMemoryGameView: View {
                     }
             }
             .padding(.horizontal)
-            .foregroundColor(game.themeColor)
+            .foregroundColor(.blue)
             VStack {
                 Spacer(minLength: 0)
                 HStack {
