@@ -9,31 +9,31 @@ import SwiftUI
 
 class EmojiThemes: ObservableObject {
     typealias EmojiTheme = (
-        name: String, contentCount: Int, content: [String], color: Color
+        name: String, contentAmount: Int, content: [String], color: Color
     )
     
     private static let themesList: [EmojiTheme] = [
         (
             name: "sport",
-            contentCount: 7,
+            contentAmount: 7,
             content: ["⚽️", "🏀", "🏐", "⚾️", "🎱", "🎾", "🏉", "🏈"],
             color: Color.blue
         ),
         (
             name: "vehicles",
-            contentCount: 8,
+            contentAmount: 8,
             content: ["🛸", "🚀", "🛰️", "🚁", "🛩️", "🛶", "⛵️", "🚤"],
             color: Color.red
         ),
         (
             name: "gadgets",
-            contentCount: 4,
+            contentAmount: 4,
             content: ["⌚️", "📱", "💻", "⌨️", "📷", "🎥", "📟", "🎙️"],
             color: Color.indigo
         ),
         (
             name: "halloween",
-            contentCount: 5,
+            contentAmount: 5,
             content: ["🎃", "💀", "👻", "🫥", "👹", "👽", "🤖", "🧻"],
             color: Color.blue
         ),
@@ -50,7 +50,7 @@ class EmojiThemes: ObservableObject {
         for theme in EmojiThemes.themesList {
             themes.addNew(
                 name: theme.name,
-                contentCount: theme.contentCount,
+                contentAmount: theme.contentAmount,
                 content: theme.content,
                 color: theme.color
             )
