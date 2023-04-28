@@ -14,8 +14,10 @@ class EmojiMemoryGame: ObservableObject {
     
     @Published private var memoryGame: MemoryGame<String>
     
-    init() {
+    init(content: [String]) {
         memoryGame = EmojiMemoryGame.createMemoryGame()
+        buildCards(content: content)
+        shuffleCards()
     }
 
     var cards: [MemoryGame<String>.Card] {
@@ -26,21 +28,14 @@ class EmojiMemoryGame: ObservableObject {
         memoryGame.score
     }
     
-    func startNewGame() {
-        resetCards()
-        buildCards()
-        shuffleCards()
-        resetScore()
-    }
-    
     func resetCards() {
         memoryGame.resetCards()
     }
     
-    func buildCards() {
+    func buildCards(content: [String]) {
         memoryGame.buildCards(
             numberOfPairsOfCards: 7,
-            content: ["🛸", "🚀", "🛰️", "🚁", "🛩️", "🛶", "⛵️", "🚤"]
+            content: content
         )
     }
     

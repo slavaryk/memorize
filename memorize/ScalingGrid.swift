@@ -20,16 +20,14 @@ struct ScalingGrid<Item, ItemView>: View where Item: Identifiable, ItemView: Vie
     
     var body: some View {
         GeometryReader { geometry in
-            VStack {
-                let width: CGFloat = getScaledWidth(dependsOn: items.count, in: geometry.size, with: aspectRatio)
-                
-                LazyVGrid(columns: [adaptiveGridItem(width: width)]) {
-                    ForEach(items) { item in
-                        content(item).aspectRatio(aspectRatio, contentMode: .fit)
-                    }
+            let width: CGFloat = getScaledWidth(dependsOn: items.count, in: geometry.size, with: aspectRatio)
+            
+            LazyVGrid(columns: [adaptiveGridItem(width: width)]) {
+                ForEach(items) { item in
+                    content(item).aspectRatio(aspectRatio, contentMode: .fit)
                 }
-                Spacer(minLength: 0)
             }
+            .padding(.horizontal)
         }
     }
     
@@ -46,7 +44,7 @@ struct ScalingGrid<Item, ItemView>: View where Item: Identifiable, ItemView: Vie
             }
             
             columnCount += 1
-            rowCount = (itemsCount + (columnCount - 1)) / columnCount
+            rowCount = (itemsCount + (columnCount)) / columnCount
         } while columnCount < itemsCount
         
         if columnCount > itemsCount {

@@ -8,8 +8,19 @@
 import SwiftUI
 
 struct EmojiThemesView: View {
+    @ObservedObject var viewModel = EmojiThemes()
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationView {
+            List(viewModel.themesList) { theme in
+                NavigationLink {
+                    EmojiMemoryGameView(game: EmojiMemoryGame(content: theme.content))
+                } label: {
+                    Text(theme.name.capitalized)
+                }
+            }
+            .navigationTitle("Choose theme")
+        }
     }
 }
 

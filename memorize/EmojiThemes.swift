@@ -46,14 +46,21 @@ class EmojiThemes: ObservableObject {
         buildThemes()
     }
     
+    var themesList: [Themes<String, Color>.Theme] {
+        themes.themes
+    }
+    
     func buildThemes() {
+        var themeId = 1
         for theme in EmojiThemes.themesList {
             themes.addNew(
+                themeId: themeId,
                 name: theme.name,
                 contentAmount: theme.contentAmount,
                 content: theme.content,
                 color: theme.color
             )
+            themeId += 1
         }
     }
 }

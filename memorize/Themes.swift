@@ -17,8 +17,15 @@ struct Themes<ThemeContent, ThemeColor> {
         chosenTheme = themes.randomElement()!
     }
     
-    mutating func addNew(name: String, contentAmount: Int, content: [ThemeContent], color: ThemeColor) {
+    mutating func addNew(
+        themeId: Int,
+        name: String,
+        contentAmount: Int,
+        content: [ThemeContent],
+        color: ThemeColor
+    ) {
         themes.append(Theme(
+            id: themeId,
             name: name,
             contentAmount: contentAmount,
             content: content,
@@ -26,7 +33,8 @@ struct Themes<ThemeContent, ThemeColor> {
         ))
     }
     
-    struct Theme {
+    struct Theme: Identifiable {
+        let id: Int
         let name: String
         let contentAmount: Int
         let content: [ThemeContent]

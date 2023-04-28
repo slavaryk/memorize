@@ -13,26 +13,14 @@ struct EmojiMemoryGameView: View {
     var body: some View {
         VStack {
             Text("Memorize").font(.largeTitle)
-            HStack(spacing: 170.0) {
-                Text("Score \(game.score)").font(.caption)
-            }
-            .padding(.top)
+            Text("Score \(game.score)").font(.caption)
             ScalingGrid(items: game.cards, aspectRatio: 2/3) { card in
                 CardView(card: card)
                     .onTapGesture {
                         game.choose(card)
                     }
             }
-            .padding(.horizontal)
             .foregroundColor(.blue)
-            VStack {
-                Spacer(minLength: 0)
-                HStack {
-                    ButtonView(label: { Text("New game").font(.title2) }) {
-                        game.startNewGame()
-                    }
-                }
-            }
         }
     }
 }
@@ -85,14 +73,5 @@ struct ButtonView: View {
     
     var body: some View {
         Button(action: action, label: label)
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        let game = EmojiMemoryGame()
-        game.startNewGame()
-        game.choose(game.cards.first!)
-        return EmojiMemoryGameView(game: game).preferredColorScheme(.light)
     }
 }
